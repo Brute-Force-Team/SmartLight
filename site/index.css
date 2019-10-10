@@ -1,0 +1,35 @@
+.line{
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border:1px solid black;
+  width:100px;
+  height:90vh;
+  top:5vh;
+  border-radius: 15px;
+}
+
+.ln1{
+  left: 90px;
+}
+.ln2{
+  right:90px;
+}
+
+.line2{
+  position: fixed;
+  right:20px;
+  border:1px solid black;
+  width: 100px;
+  height: 90vh;
+  top:5vh;
+}
+
+.line div{
+  border:1px solid black;
+  width:50px;
+  border-radius: 25px;
+  height: 50px;
+}
