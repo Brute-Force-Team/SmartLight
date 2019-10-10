@@ -30,11 +30,13 @@
     </div>
     <script>
       var d_id = 0;
-
       $('.diode').colpick({
         onSubmit:function(hsb,hex,rgb,el,bySetColor) {
           element = document.getElementById(d_id);
           element.style.background = '#'+hex;
+          //var xmlHttp = new XMLHttpRequest();
+          //xmlHttp.open( "GET", "192.168.43.240?id="+d_id+"&color="+hex, false );
+          //xmlHttp.send( null );
           $(el).colpickHide();
         }
       });
