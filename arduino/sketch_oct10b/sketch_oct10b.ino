@@ -6,7 +6,7 @@
 #define SENSOR2 13
 
 bool night = true;
-bool deepnight = false;
+bool deepnight = true;
 
 
 CRGB leds_left[NUM_LEDS];
@@ -34,13 +34,16 @@ void loop() {
   }
 
   if(flag){
-    if(string[1]=='Y'){
+    if(string[0]=='Y'){
+      sensor_controll = false;
       turn_on('L');
       turn_on('R');
-    }else if(string[1] == 'N'){
+    }else if(string[0] == 'N'){
+      sensor_controll = false;
       turn_off('L');
       turn_off('R');
     }else if(string[1] == 'C'){
+      sensor_controll = false;
       setColor(string[0], string[2]-1,string[3]-1,string[4]-1,string[5]);
     }else if(string[0] == 'D'){
       sensor_controll = true;
@@ -74,7 +77,7 @@ void turn_on(char dirr){
     }
   }else if(dirr == 'R'){
     for(int i = 0; i < NUM_LEDS; ++i){
-      leds_left[i] = CRGB::White;
+      leds_right[i] = CRGB::White;
     }
   }
 
@@ -87,7 +90,7 @@ void turn_off(char dirr){
     }
   }else if(dirr == 'R'){
     for(int i = 0; i < NUM_LEDS; ++i){
-      leds_left[i] = CRGB::Black;
+      leds_right[i] = CRGB::Black;
     }
   }
 
@@ -125,23 +128,27 @@ void setColor(char dirr, char red,char green,char blue,char id){
 
 }
 void set_temp_brightness(int brightness, int end_brightness){
-  for(int i = 0; i<NUM_LEDS; ++i){
-    for(int j = brightness; j<end_brightness; ++j){
+  Serial.write("new fix; state = true\n");
+  for(int j = brightness; j<end_brightness; ++j){
+    for(int i = 0; i<NUM_LEDS; ++i){
       leds_left[i].setRGB(j,j,j);
       leds_right[i].setRGB(j,j,j);
       FastLED.show();
-      delay(10);
     }
+    delay(10);
   }
   delay(5000);
-  for(int i = 0; i < NUM_LEDS; ++i){
-    for(int j = end_brightness; j<brightness; --j){
+  while(night && digitalRead(SENSOR2)){delay(5000); Serial.write("state = true\n");}
+  Serial.write("state = false\n");
+  for(int j = end_brightness; j>brightness; --j){
+    for(int i = 0; i < NUM_LEDS; ++i){
       leds_left[i].setRGB(j,j,j);
       leds_right[i].setRGB(j,j,j);
       FastLED.show();
-      delay(10);
     }
+    delay(10);
   }
+  delay(500);
 }
 void set_brightness(int brightness){
   for(int i = 0; i < NUM_LEDS; ++i){
@@ -152,22 +159,24 @@ void set_brightness(int brightness){
 }
 
 void digital_sensor(){
-  bool state = digitalRead(SENSOR1);
+  bool state = digitalRead(SENSOR2);
+  delay(100);
   if(night){
     if(deepnight){
-      set_brightness(25500/40);
+      set_brightness(102);
       if(state){
-        set_temp_brightness(25500/40,25500/90);
+        set_temp_brightness(102,230);
       }
     }else{
-      set_brightness(25500/70);
+      set_brightness(179);
       if(state){
-        set_temp_brightness(25500/70,25500/90);
+        set_temp_brightness(179,230);
       }
     }
   }else{
     turn_off('L');
     turn_off('R');
   }
-
+  delay(100);
 }
+
