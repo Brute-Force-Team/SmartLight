@@ -3,35 +3,7 @@
   <head>
     <title>Управління</title>
     <script type="text/javascript" src="js/jquery.js"></script>
-    <!--<link rel = "stylesheet" href = "index.css">-->
-    <style>
-    .line{
-      position: fixed;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      align-items: center;
-      border:1px solid black;
-      width:100px;
-      height:75vh;
-      top:5vh;
-      border-radius: 15px;
-    }
-
-    .ln1{
-      left: 90px;
-    }
-    .ln2{
-      right:90px;
-    }
-
-    .line div{
-      background:#ddd;
-      width:50px;
-      border-radius: 25px;
-      height: 50px;
-    }
-    </style>
+    <link rel = "stylesheet" href = "index.css">
     <script src="cp/js/colpick.js" type="text/javascript"></script>
     <link rel="stylesheet" href="cp/css/colpick.css" type="text/css"/>
   </head>
@@ -47,27 +19,76 @@
       <div class = "D8 diode" onclick="d_id = 8;" id = "8"></div>
     </div>
     <div class="line ln2">
-      <div class = "DD1 diode " onclick="d_id = 9;" id = "9"></div>
-      <div class = "DD2 diode " onclick="d_id = 10;" id = "10"></div>
-      <div class = "DD3 diode " onclick="d_id = 11;" id = "11"></div>
-      <div class = "DD4 diode " onclick="d_id = 12;" id = "12"></div>
-      <div class = "DD5 diode " onclick="d_id = 13;" id = "13"></div>
-      <div class = "DD6 diode " onclick="d_id = 14;" id = "14"></div>
-      <div class = "DD7 diode " onclick="d_id = 15;" id = "15"></div>
-      <div class = "DD8 diode " onclick="d_id = 16;" id = "16"></div>
+      <div class = "D1 diode" onclick="d_id = 1;" id = "9"></div>
+      <div class = "D2 diode" onclick="d_id = 2;" id = "10"></div>
+      <div class = "D3 diode" onclick="d_id = 3;" id = "11"></div>
+      <div class = "D4 diode" onclick="d_id = 4;" id = "12"></div>
+      <div class = "D5 diode" onclick="d_id = 5;" id = "13"></div>
+      <div class = "D6 diode" onclick="d_id = 6;" id = "14"></div>
+      <div class = "D7 diode" onclick="d_id = 7;" id = "15"></div>
+      <div class = "D8 diode" onclick="d_id = 8;" id = "16"></div>
+    </div>
+    <div class="buttons">
+      <div class = "btn" onclick="">
+        Ввімкнути/вимкнути
+      </div>
+      <div class= "btn">
+        Автоматичний режим
+      </div>
+      <div class="btn">
+        Увімкнути датчики
+      </div>
     </div>
     <script>
       var d_id = 0;
+      var on = false;
+
+
       $('.diode').colpick({
         onSubmit:function(hsb,hex,rgb,el,bySetColor) {
-          element = document.getElementById(d_id);
-          element.style.background = '#'+hex;
-          var xmlHttp = new XMLHttpRequest();
-          xmlHttp.open( "GET", "192.168.43.250?id="+d_id+"&color="+hex, false );
-          xmlHttp.send( null );
+          var Class = "D"+d_id;
+          elements = document.getElementsByClassName(Class);
+          var red = rgb.r;
+          var green = rgb.g;
+          var blue = rgb.b;
+          if(red == 0){ red = 1;}
+          if(green == 0){ green = 1;}
+          if(blue == 0){ blue = 1;}
+          elements[0].style.background = '#'+hex;
+          elements[1].style.background = '#'+hex;
+          var id = d_id + 60;
+
+          var ob = {
+            'red' : red,
+            'green' : green,
+            'blue' : blue,
+            'id' : id
+          };
+
+          $.ajax({
+            type:'POST',
+            url:'write.php',
+            dataType:'json',
+            data:"param="+JSON.stringify(ob),
+            success:function(html) {
+            }
+          });
+
           $(el).colpickHide();
         }
       });
+
+      function sendtext(text){
+        $.ajax({
+
+          type:'POST',
+          url:'send.php',
+          dataType:'text',
+          data:"param="+text,
+          success:function(html) {
+          }
+        });
+      }
 
     </script>
   </body>

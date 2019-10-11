@@ -7,7 +7,7 @@
 #define BRIGHTNESS  64
 #define LED_TYPE    WS2812B
 #define COLOR_ORDER GRB
-#define UPDATES_PER_SECOND 30
+#define UPDATES_PER_SECOND 20
 
 CRGBPalette16 currentPalette;
 TBlendType    currentBlending;
