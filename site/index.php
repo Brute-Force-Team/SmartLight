@@ -29,13 +29,13 @@
       <div class = "D8 diode" onclick="d_id = 8;" id = "16"></div>
     </div>
     <div class="buttons">
-      <div class = "btn" onclick="">
+      <div class = "btn" onclick="sendtext('Y')">
         Ввімкнути/вимкнути
       </div>
-      <div class= "btn">
+      <div class= "btn" onclick="sendtext('A')">
         Автоматичний режим
       </div>
-      <div class="btn">
+      <div class="btn" onclick="sendtext('D')">
         Увімкнути датчики
       </div>
     </div>
@@ -77,10 +77,18 @@
           $(el).colpickHide();
         }
       });
-
       function sendtext(text){
-        $.ajax({
+        if(text == 'Y'){
+          if(on == false){
+            on = true;
+            text='Y';
+          }else{
+            on=true;
+            text='N';
+          }
+        }
 
+        $.ajax({
           type:'POST',
           url:'send.php',
           dataType:'text',
