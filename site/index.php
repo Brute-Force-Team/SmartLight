@@ -3,7 +3,35 @@
   <head>
     <title>Управління</title>
     <script type="text/javascript" src="js/jquery.js"></script>
-    <link rel = "stylesheet" href = "index.css">
+    <!--<link rel = "stylesheet" href = "index.css">-->
+    <style>
+    .line{
+      position: fixed;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      border:1px solid black;
+      width:100px;
+      height:75vh;
+      top:5vh;
+      border-radius: 15px;
+    }
+
+    .ln1{
+      left: 90px;
+    }
+    .ln2{
+      right:90px;
+    }
+
+    .line div{
+      background:#ddd;
+      width:50px;
+      border-radius: 25px;
+      height: 50px;
+    }
+    </style>
     <script src="cp/js/colpick.js" type="text/javascript"></script>
     <link rel="stylesheet" href="cp/css/colpick.css" type="text/css"/>
   </head>

@@ -1,13 +1,19 @@
 #include <FastLED.h>
 #define NUM_LEDS 6
+//5
 #define DATA_PIN 6
+#define SENSOR1 12
+#define SENSOR2 13
+
+
 
 CRGB leds[NUM_LEDS];
 byte string[20];
-
+bool sensor_controll = false;
 void setup() {
   Serial.begin(115200);
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
+  pinmode(SENSOR1, INPUT);
 }
 
 void loop() {
@@ -20,20 +26,29 @@ void loop() {
     flag = true;
     delay(5);
   }
+
   if(flag){
     if(string[0]=='Y'){
       Serial.write(string[0]);
+      sensor_controll = false;
       turn_on();
     }else if(string[0] == 'N'){
+      sensor_controll = false;
       Serial.write(string[0]);
       turn_off();
     }else if(string[0] == 'C'){
       for(int i = 0; i<5; ++i){
+        sensor_controll = false;
         // unsigned char chr = string[i];
         Serial.write(string[i]);
       }
       setColor(string[1]-1,string[2]-1,string[3]-1,string[4]);
+    }else if(string[0] == 'D'){
+      sensor_controll = true;
     }
+  }
+  if(sensor_controll){
+    digital_sensor();
   }
 }
 void test(){
@@ -78,5 +93,14 @@ void setColor(char red,char green,char blue,char id){
     }
     leds[id].setRGB(red,green,blue);
     FastLED.show();
+  }
+}
+void digital_sensor(){
+  bool state = digitalRead(SENSOR1);
+  if(state == true){
+    turn_on();
+    delay(2000);
+  }else{
+    turn_off();
   }
 }
